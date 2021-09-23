@@ -44,8 +44,12 @@ class SearchForm extends Component {
             <ol className="books-grid">
               {avaliableBooks !== undefined &&
                 avaliableBooks !== [] &&
+                this.state.query !== "" &&
+                Array.isArray(avaliableBooks) &&
                 avaliableBooks.map((b) => {
-                  return <Book me={b} onClick={this.props.UpdateShelf} />;
+                  return (
+                    <Book me={b} id={b.id} onClick={this.props.UpdateShelf} />
+                  );
                 })}
             </ol>
           </div>

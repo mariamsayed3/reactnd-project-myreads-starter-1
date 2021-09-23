@@ -7,12 +7,6 @@ import SearchForm from "./SearchForm.js";
 
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
     allBooks: [],
   };
   componentDidMount() {
@@ -25,7 +19,6 @@ class BooksApp extends React.Component {
   onUpdateShelf(book, nameOfNewShelf) {
     BooksAPI.update(book, nameOfNewShelf).then(() => {
       const theAvaliableBooks = this.state.allBooks;
-      console.log(theAvaliableBooks);
       this.state.allBooks.map((b) => {
         if (b.id === book.id) {
           b.shelf = nameOfNewShelf;
@@ -41,7 +34,6 @@ class BooksApp extends React.Component {
 
   render() {
     const myBooks = this.state.allBooks;
-    console.log(myBooks);
     const currentlyReadingFilteration = myBooks.filter(
       (book) => book.shelf === "currentlyReading"
     );
@@ -78,7 +70,7 @@ class BooksApp extends React.Component {
           )}
         />
         <Route
-          path="/SearchForm"
+          path="/search"
           render={() => (
             <SearchForm UpdateShelf={this.onUpdateShelf.bind(this)} />
           )}

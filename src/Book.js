@@ -10,22 +10,33 @@ class Book extends Component {
   render() {
     const am = this.props.me;
     return (
-      <li key={am.id}>
+      <li key={this.props.id}>
         <div className="book">
-          <div className="book-top">
-            <div
-              className="book-cover"
-              style={{
-                width: 128,
-                height: 160,
-                backgroundImage: `url(${am.imageLinks.thumbnail})`,
-              }}
-            />
+          <div className="book-top" key={this.props.id}>
+            {am.hasOwnProperty("imageLinks") ? (
+              <div
+                className="book-cover"
+                style={{
+                  width: 128,
+                  height: 160,
+                  backgroundImage: `url(${am.imageLinks.thumbnail})`,
+                }}
+              />
+            ) : (
+              <div
+                className="book-cover"
+                style={{
+                  width: 128,
+                  height: 160,
+                }}
+              />
+            )}
             <div className="book-shelf-changer">
               <select
                 onChange={(event) => {
                   this.changeMeShelf(am, event.target.value);
                 }}
+                defaultValue={am.shelf}
               >
                 <option value="move">Move to...</option>
                 <option value="wantToRead">Want to Read</option>
@@ -36,11 +47,13 @@ class Book extends Component {
             </div>
           </div>
           <div className="book-title">{am.title}</div>
-          <div className="book-authors">
-            {am.authors.map((author) => {
-              return <p>{author}</p>;
-            })}
-          </div>
+          {am.authors !== [] && am.hasOwnProperty("authors") && (
+            <div className="book-authors">
+              {am.authors.map((author) => {
+                return <p key={am.myKey}>{author}</p>;
+              })}
+            </div>
+          )}
         </div>
       </li>
     );

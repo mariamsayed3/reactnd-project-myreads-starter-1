@@ -12,12 +12,12 @@ class MyShelf extends Component {
           <div className="bookshelf-books">
             <ol className="books-grid">
               {myBooks.map((book) => (
-                <Book me={book} onClick={this.props.UpdateShelf} />
+                <Book me={book} id={book.id} onClick={this.props.UpdateShelf} />
               ))}
             </ol>
           </div>
         </div>
-        <Link className="open-search" to="/SearchForm">
+        <Link className="open-search" to="/search">
           Add new book
         </Link>
       </div>
