@@ -9,25 +9,23 @@ class SearchForm extends Component {
     thebooks: [],
   };
 
-  componentDidMount() {
-    BooksAPI.getAll().then((books) => {
+  changeQueryValue = (query) => {
+    this.setState(() => ({
+      query: query,
+    }));
+    if (this.state.query !== "") {
+      this.searchForSpecificBook();
+    }
+  };
+  searchForSpecificBook() {
+    BooksAPI.search(this.state.query).then((theTargetBook) => {
       this.setState(() => ({
-        thebooks: books,
+        thebooks: theTargetBook,
       }));
     });
   }
-
-  changeQueryValue = (query) => {
-    this.setState(() => ({
-      query: query.trim(),
-    }));
-  };
-
   render() {
     const avaliableBooks = this.state.thebooks;
-    const afterFilteration = avaliableBooks.filter((book) =>
-      book.title.toLowerCase().includes(this.state.query.toLowerCase())
-    );
 
     return (
       <div className="search-books">
@@ -44,9 +42,11 @@ class SearchForm extends Component {
         {this.state.query !== "" && (
           <div search-books-results>
             <ol className="books-grid">
-              {afterFilteration.map((book) => (
-                <Book me={book} onClick={this.props.UpdateShelf} />
-              ))}
+              {avaliableBooks !== undefined &&
+                avaliableBooks !== [] &&
+                avaliableBooks.map((b) => {
+                  return <Book me={b} onClick={this.props.UpdateShelf} />;
+                })}
             </ol>
           </div>
         )}
