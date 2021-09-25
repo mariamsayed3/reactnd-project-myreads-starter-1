@@ -24,29 +24,6 @@ class SearchForm extends Component {
       }));
     });
   }
-  assignShelf(result) {
-    const theAPIbooks = this.props.apiBooks;
-    if (Array.isArray(theAPIbooks) && theAPIbooks !== []) {
-      theAPIbooks.map((apibook) => {
-        this.nestedloops(apibook, result);
-      });
-    }
-  }
-
-  nestedloops(everybookinsideAPI, mapValue) {
-    if (Array.isArray(mapValue) && mapValue !== []) {
-      mapValue.map((mybook) => {
-        if (mybook.id === everybookinsideAPI.id) {
-          mybook.shelf = everybookinsideAPI.shelf;
-          BooksAPI.update(mybook, everybookinsideAPI.shelf);
-        }
-        return mybook;
-      });
-    }
-    this.setState(() => ({
-      thebooks: mapValue,
-    }));
-  }
 
   render() {
     let avaliableBooks;
