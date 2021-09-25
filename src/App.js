@@ -41,7 +41,6 @@ class BooksApp extends React.Component {
       (book) => book.shelf === "wantToRead"
     );
     const readFilteration = myBooks.filter((book) => book.shelf === "read");
-    const { bookState } = this.state.allBooks;
     return (
       <div className="app">
         <Route
@@ -75,7 +74,7 @@ class BooksApp extends React.Component {
           render={() => (
             <SearchForm
               UpdateShelf={this.onUpdateShelf.bind(this)}
-              apiBooks={bookState}
+              apiBooks={this.state.allBooks}
             />
           )}
         />

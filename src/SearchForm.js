@@ -50,9 +50,11 @@ class SearchForm extends Component {
 
   render() {
     let avaliableBooks;
-    if (Array.isArray(this.state.thebooks)) {
+    const propBooks = this.props.apiBooks;
+    if (Array.isArray(this.state.thebooks) && Array.isArray(propBooks)) {
+      console.log("hello");
       avaliableBooks = this.state.thebooks.map((searchedBook) => {
-        const myBook = this.props.apiBooks.filter(
+        const myBook = propBooks.filter(
           (myBook) => myBook.id === searchedBook.id
         )[0];
         if (myBook) searchedBook.shelf = myBook.shelf;
@@ -74,6 +76,7 @@ class SearchForm extends Component {
             />
           </div>
         </div>
+
         {queryState !== "" && (
           <div search-books-results>
             <ol className="books-grid">
