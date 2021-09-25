@@ -19,19 +19,8 @@ class SearchForm extends Component {
   };
   searchForSpecificBook() {
     BooksAPI.search(this.state.query).then((theTargetBook) => {
-      this.assignShelf(theTargetBook);
-      const newState = this.state.thebooks;
-      if (Array.isArray(newState)) {
-        theTargetBook.map((book) => {
-          if (book.hasOwnProperty("shelf") === false) {
-            book.shelf = "none";
-            BooksAPI.update(book, book.shelf);
-          }
-          return book;
-        });
-      }
       this.setState(() => ({
-        thebooks: newState,
+        thebooks: theTargetBook,
       }));
     });
   }
@@ -60,8 +49,19 @@ class SearchForm extends Component {
   }
 
   render() {
-    const avaliableBooks = this.state.thebooks;
-
+    let avaliableBooks;
+    if (Array.isArray(this.state.thebooks)) {
+      avaliableBooks = this.state.thebooks.map((searchedBook) => {
+        const myBook = this.props.apiBooks.filter(
+          (myBook) => myBook.id === searchedBook.id
+        )[0];
+        if (myBook) searchedBook.shelf = myBook.shelf;
+        else searchedBook.shelf = "none";
+        return searchedBook;
+      });
+    }
+    const { queryState } = this.state.query;
+    const { updateShelf } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -69,22 +69,20 @@ class SearchForm extends Component {
           <div className="search-books-input-wrapper">
             <input
               type="text"
-              value={this.state.query}
+              value={queryState}
               onChange={(event) => this.changeQueryValue(event.target.value)}
             />
           </div>
         </div>
-        {this.state.query !== "" && (
+        {queryState !== "" && (
           <div search-books-results>
             <ol className="books-grid">
               {avaliableBooks !== undefined &&
                 avaliableBooks !== [] &&
-                this.state.query !== "" &&
+                queryState !== "" &&
                 Array.isArray(avaliableBooks) &&
                 avaliableBooks.map((b) => {
-                  return (
-                    <Book me={b} key={b.id} onClick={this.props.UpdateShelf} />
-                  );
+                  return <Book me={b} key={b.id} onClick={updateShelf} />;
                 })}
             </ol>
           </div>
