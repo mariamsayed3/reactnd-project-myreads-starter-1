@@ -72,7 +72,10 @@ class BooksApp extends React.Component {
         <Route
           path="/search"
           render={() => (
-            <SearchForm UpdateShelf={this.onUpdateShelf.bind(this)} />
+            <SearchForm
+              UpdateShelf={this.onUpdateShelf.bind(this)}
+              apiBooks={this.state.allBooks}
+            />
           )}
         />
       </div>

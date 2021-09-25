@@ -7,10 +7,11 @@ class Book extends Component {
   changeMeShelf(book, nameOfTheUpdatedShelf) {
     this.props.onClick(book, nameOfTheUpdatedShelf);
   }
+
   render() {
     const am = this.props.me;
     return (
-      <li key={this.props.id}>
+      <li>
         <div className="book">
           <div className="book-top" key={this.props.id}>
             {am.hasOwnProperty("imageLinks") ? (
@@ -49,8 +50,8 @@ class Book extends Component {
           <div className="book-title">{am.title}</div>
           {am.authors !== [] && am.hasOwnProperty("authors") && (
             <div className="book-authors">
-              {am.authors.map((author) => {
-                return <p key={am.myKey}>{author}</p>;
+              {am.authors.map((author, index) => {
+                return <p key={index}>{author}</p>;
               })}
             </div>
           )}

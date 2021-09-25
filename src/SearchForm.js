@@ -19,11 +19,46 @@ class SearchForm extends Component {
   };
   searchForSpecificBook() {
     BooksAPI.search(this.state.query).then((theTargetBook) => {
+      this.assignShelf(theTargetBook);
+      const newState = this.state.thebooks;
+      if (Array.isArray(newState)) {
+        theTargetBook.map((book) => {
+          if (book.hasOwnProperty("shelf") === false) {
+            book.shelf = "none";
+            BooksAPI.update(book, book.shelf);
+          }
+          return book;
+        });
+      }
       this.setState(() => ({
-        thebooks: theTargetBook,
+        thebooks: newState,
       }));
     });
   }
+  assignShelf(result) {
+    const theAPIbooks = this.props.apiBooks;
+    if (Array.isArray(theAPIbooks) && theAPIbooks !== []) {
+      theAPIbooks.map((apibook) => {
+        this.nestedloops(apibook, result);
+      });
+    }
+  }
+
+  nestedloops(everybookinsideAPI, mapValue) {
+    if (Array.isArray(mapValue) && mapValue !== []) {
+      mapValue.map((mybook) => {
+        if (mybook.id === everybookinsideAPI.id) {
+          mybook.shelf = everybookinsideAPI.shelf;
+          BooksAPI.update(mybook, everybookinsideAPI.shelf);
+        }
+        return mybook;
+      });
+    }
+    this.setState(() => ({
+      thebooks: mapValue,
+    }));
+  }
+
   render() {
     const avaliableBooks = this.state.thebooks;
 
@@ -48,7 +83,7 @@ class SearchForm extends Component {
                 Array.isArray(avaliableBooks) &&
                 avaliableBooks.map((b) => {
                   return (
-                    <Book me={b} id={b.id} onClick={this.props.UpdateShelf} />
+                    <Book me={b} key={b.id} onClick={this.props.UpdateShelf} />
                   );
                 })}
             </ol>

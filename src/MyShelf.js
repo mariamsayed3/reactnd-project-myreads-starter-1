@@ -12,7 +12,11 @@ class MyShelf extends Component {
           <div className="bookshelf-books">
             <ol className="books-grid">
               {myBooks.map((book) => (
-                <Book me={book} id={book.id} onClick={this.props.UpdateShelf} />
+                <Book
+                  me={book}
+                  key={book.id}
+                  onClick={this.props.UpdateShelf}
+                />
               ))}
             </ol>
           </div>
