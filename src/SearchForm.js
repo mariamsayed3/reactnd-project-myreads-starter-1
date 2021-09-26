@@ -10,26 +10,37 @@ class SearchForm extends Component {
   };
 
   changeQueryValue = (query) => {
-    this.setState(() => ({
-      query: query,
-    }));
-    if (this.state.query !== "") {
-      this.searchForSpecificBook();
-    }
+    this.setState(
+      { query: query },
+      this.searchForSpecificBook(this.state.query)
+    );
   };
-  searchForSpecificBook() {
-    BooksAPI.search(this.state.query).then((theTargetBook) => {
-      this.setState(() => ({
-        thebooks: theTargetBook,
-      }));
-    });
+  searchForSpecificBook(stateValue) {
+    if (stateValue !== "") {
+      BooksAPI.search(stateValue).then((theTargetBook) => {
+        this.setState(() => ({
+          thebooks: theTargetBook,
+        }));
+      });
+    } else {
+      this.setState({ query: "" });
+    }
+  }
+  checking(arrayofbooks, stateQuery) {
+    if (
+      arrayofbooks !== undefined &&
+      arrayofbooks !== [] &&
+      stateQuery !== "" &&
+      Array.isArray(arrayofbooks)
+    )
+      return true;
+    else return false;
   }
 
   render() {
     let avaliableBooks;
     const propBooks = this.props.apiBooks;
     if (Array.isArray(this.state.thebooks) && Array.isArray(propBooks)) {
-      console.log("hello");
       avaliableBooks = this.state.thebooks.map((searchedBook) => {
         const myBook = propBooks.filter(
           (myBook) => myBook.id === searchedBook.id
@@ -40,7 +51,6 @@ class SearchForm extends Component {
       });
     }
     const { queryState } = this.state.query;
-    const { updateShelf } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -54,15 +64,14 @@ class SearchForm extends Component {
           </div>
         </div>
 
-        {queryState !== "" && (
-          <div search-books-results>
+        {this.state.query !== "" && (
+          <div className="search-books-results">
             <ol className="books-grid">
-              {avaliableBooks !== undefined &&
-                avaliableBooks !== [] &&
-                queryState !== "" &&
-                Array.isArray(avaliableBooks) &&
+              {this.checking(avaliableBooks, queryState) &&
                 avaliableBooks.map((b) => {
-                  return <Book me={b} key={b.id} onClick={updateShelf} />;
+                  return (
+                    <Book me={b} key={b.id} onClick={this.props.UpdateShelf} />
+                  );
                 })}
             </ol>
           </div>
